@@ -22,10 +22,11 @@ class PostView(TemplateView):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        # {"action": ["like_post"]}
-        return {"like_post": self._like_post, "dislike_post": self._dislike_post}.get(
-            request.POST.get("action")
-        )(request, **kwargs)
+        return {
+            "like_post": self._like_post,
+            "dislike_post": self._dislike_post,
+            "update_post": self._update_post,
+        }.get(request.POST.get("action"))(request, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,7 +35,9 @@ class PostView(TemplateView):
     def _like_post(self, request, **kwargs):
         # TODO: обработать 2-й клик на лайк, т.е. убрать лайк
         post = Post.objects.get(id=id)
+
         post.likes.add(request.user)
+        print(post.likes)
         post.save()
         context = {"obj": post}
         return HttpResponse(
@@ -42,4 +45,7 @@ class PostView(TemplateView):
         )
 
     def _dislike_post(self, request, **kwargs):
+        pass
+
+    def _update_post(self, request, **kwargs):
         pass

@@ -33,11 +33,13 @@ class Post(models.Model):
 
     likes = models.ManyToManyField(
         "users.User",
+        related_name="post_user_likes",
         verbose_name="Who like post",
         blank=True,
     )
     dislikes = models.ManyToManyField(
         "users.User",
+        related_name="post_user_dislikes",
         verbose_name="Who dislike post",
         blank=True,
     )
